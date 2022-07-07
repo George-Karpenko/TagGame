@@ -36,8 +36,8 @@ export const actions: ActionTree<State, RootState> & Actions = {
         console.debug("FETCH_IMGS");
         const imgs: Options = [
           {
-            value: "/src/assets/imgs/1.png",
-            text: "1.png",
+            value: "/src/assets/imgs/1.jpg",
+            text: "1.jpg",
           },
           {
             value: "/src/assets/imgs/2.jpg",
