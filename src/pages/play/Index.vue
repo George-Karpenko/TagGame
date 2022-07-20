@@ -2,8 +2,8 @@
 import { ref, watch, onMounted, computed } from "vue";
 import store from "@/store";
 import Grid from "@/js/games/Class/Grid";
-import ModalGame from "@/components/Play/ModalGame.vue";
-import HeaderComponent from "@/components/Play/Header.vue";
+import GameModal from "@/components/GameModal.vue";
+import GameHeader from "@/components/GameHeader.vue";
 
 const grid = new Grid();
 const triggerGame = computed(() => store.state.game.triggerGame);
@@ -43,7 +43,7 @@ onMounted(() => {
 
 <template>
   <div ref="game" class="game">
-    <HeaderComponent />
+    <game-header />
     <aside></aside>
     <main>
       <div id="game-board">
@@ -63,7 +63,7 @@ onMounted(() => {
       </div>
     </main>
   </div>
-  <ModalGame />
+  <game-modal />
 </template>
 
 <style scoped>
@@ -136,8 +136,8 @@ aside::before {
   display: block;
   height: var(--height);
   width: var(--width);
-  margin-top: calc(var(--height) * (var(--aside-y) - 1));
-  margin-left: calc(var(--width) * (var(--aside-x) - 1));
+  margin-top: calc(var(--height) * (var(--aside-y) - 1) + 1px);
+  margin-left: calc(var(--width) * (var(--aside-x) - 1) + 1px);
   background: #fff;
   opacity: var(--no-full-image-opacity);
   transition: opacity 0.3s;

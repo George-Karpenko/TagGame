@@ -2,9 +2,7 @@
 import { ref, watch, onMounted, computed } from "vue";
 import store from "@/store";
 import { GameActionTypes } from "@/store/game/action-types";
-import Pause from "@/components/SVG/Pause.vue";
-import Play from "@/components/SVG/Play.vue";
-import SVGMenu from "@/components/SVG/Menu.vue";
+
 
 const namespace: string = "game/";
 const countMove = computed(() => store.state.game.countMove);
@@ -42,18 +40,25 @@ onMounted(() => {
     <nav>
       <p>Время: {{ time }}</p>
       <div @click="pause = !pause">
-        <Play v-show="pause" />
-        <Pause v-show="!pause" />
+        <span class="icon-Play" v-show="pause"></span>
+        <span class="icon-Pause" v-show="!pause"></span>
       </div>
       <p>Количество ходов: {{ countMove }}</p>
-      <router-link :to="{ name: 'Main' }"><SVGMenu /></router-link>
+      <router-link :to="{ name: 'Main' }"
+        ><span class="icon-Menu"></span
+      ></router-link>
     </nav>
   </header>
 </template>
 
 <style scoped>
-svg {
-  height: 1.5em;
+[class^="icon-"], [class*=" icon-"] {
+  font-size: 2em;
+  cursor: pointer;
+}
+a {
+  text-decoration: none;
+  color: inherit;
 }
 nav {
   display: flex;

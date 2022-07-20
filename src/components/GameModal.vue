@@ -2,7 +2,7 @@
 import { computed } from "vue";
 import store from "@/store";
 import { GameActionTypes } from "@/store/game/action-types";
-import Modal from "@/components/Modal.vue";
+import BaseModal from "@/components/BaseModal.vue";
 
 const namespace: string = "game/";
 const countMove = computed(() => store.state.game.countMove);
@@ -18,7 +18,7 @@ const triggerGame = computed<boolean>({
 </script>
 
 <template>
-  <Modal v-if="!triggerGame" @close="triggerGame = true">
+  <base-modal v-if="!triggerGame" @close="triggerGame = true">
     <template v-slot:header>
       <h3>Вы выиграли!</h3>
     </template>
@@ -32,7 +32,7 @@ const triggerGame = computed<boolean>({
       >
       <button @click="triggerGame = true">Начать с начала</button>
     </template>
-  </Modal>
+  </base-modal>
 </template>
 
 <style scoped></style>

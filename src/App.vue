@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, watch } from "vue";
 import store from "@/store";
 import { SettingsActionTypes } from "@/store/settings/action-types";
-import Modal from "@/components/Modal.vue";
+import BaseModal from "@/components/BaseModal.vue";
 
 const namespace: string = "settings/";
 const music = computed(() => store.state.settings.musicSelection.value);
@@ -65,7 +65,7 @@ function musicStart(trigger: boolean = false) {
   <template v-if="!loaded">
     <audio ref="audio" loop></audio>
     <router-view />
-    <Modal v-if="triggerModal">
+    <base-modal v-if="triggerModal">
       <template v-slot:header>
         <h3>Согласие на музыку в игре</h3>
       </template>
@@ -76,7 +76,7 @@ function musicStart(trigger: boolean = false) {
         <button @click="musicStart(true)">Да</button>
         <button @click="musicStart()">Нет</button>
       </template>
-    </Modal>
+    </base-modal>
   </template>
 </template>
 

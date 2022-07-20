@@ -4,17 +4,17 @@ export const routes = [
   {
     path: "/",
     name: "Main",
-    component: () => import("./components/Main/Index.vue"),
+    component: () => import("./pages/Index.vue"),
   },
   {
     path: "/play",
     name: "Play",
-    component: () => import("./components/Play/Index.vue"),
+    component: () => import("./pages/play/Index.vue"),
   },
   {
     path: "/settings",
     name: "Settings",
-    component: () => import("./components/Main/Settings.vue"),
+    component: () => import("./pages/settings/Index.vue"),
   },
 ];
 
