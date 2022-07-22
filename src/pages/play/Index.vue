@@ -43,7 +43,7 @@ onMounted(() => {
 
 <template>
   <div ref="game" class="game">
-    <game-header />
+    <GameHeader />
     <aside></aside>
     <main>
       <div id="game-board">
@@ -63,7 +63,7 @@ onMounted(() => {
       </div>
     </main>
   </div>
-  <game-modal />
+  <GameModal />
 </template>
 
 <style scoped>
