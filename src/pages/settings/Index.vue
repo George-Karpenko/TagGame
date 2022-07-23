@@ -41,7 +41,7 @@ function exitInMain(save = false) {
 <template>
   <audio ref="audio" :src="audioSrc"></audio>
   <div class="container">
-    <InputsComponent v-model="settings" name="Настройки"></InputsComponent>
+    <inputs-component v-model="settings" name="Настройки"></inputs-component>
     <div class="upSetting">
       <button @click="exitInMain()" class="cancel">Отмена</button>
       <button @click="exitInMain(true)">Сохранить</button>
