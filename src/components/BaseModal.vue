@@ -1,6 +1,23 @@
+<script setup lang="ts">
+const props = defineProps({
+  isOpen: { type: Boolean, required: true }
+})
+
+const emit = defineEmits<{
+  (e: 'close'): void
+  (e: 'ok'): void
+}>()
+const close = () => {
+  emit("close");
+} 
+const confirm = () => {
+  emit("ok");
+}
+</script>
+
 <template>
-  <div class="modal-mask">
-    <div class="modal-wrapper" @click.self="$emit('close')">
+  <div class="modal-mask" v-if="isOpen">
+    <div class="modal-wrapper" @click.self="close">
       <div class="modal-container">
         <div class="modal-header">
           <slot name="header"></slot>
@@ -11,8 +28,11 @@
         </div>
 
         <div class="modal-footer">
-          <slot name="footer">
-            <button class="modal-default-button" @click="$emit('close')">
+          <slot name="footer" :close="close" :confirm="confirm">
+            <button class="modal-default-button" @click="close">
+              Close
+            </button>
+            <button class="modal-default-button" @click="confirm">
               OK
             </button>
           </slot>

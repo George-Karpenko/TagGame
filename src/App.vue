@@ -65,16 +65,16 @@ function musicStart(trigger: boolean = false) {
   <template v-if="!loaded">
     <audio ref="audio" loop></audio>
     <router-view />
-    <base-modal v-if="triggerModal">
-      <template v-slot:header>
+    <base-modal :is-open="triggerModal" @close="musicStart" @ok="musicStart(true)">
+      <template #header>
         <h3>Согласие на музыку в игре</h3>
       </template>
-      <template v-slot:body>
+      <template #body>
         <p>Даёте ли вы согласие на музыку в этой игре?</p>
       </template>
-      <template v-slot:footer>
-        <button @click="musicStart(true)">Да</button>
-        <button @click="musicStart()">Нет</button>
+      <template #footer="{ close, confirm }">
+        <button @click="confirm">Да</button>
+        <button @click="close">Нет</button>
       </template>
     </base-modal>
   </template>

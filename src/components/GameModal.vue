@@ -18,19 +18,19 @@ const triggerGame = computed<boolean>({
 </script>
 
 <template>
-  <base-modal v-if="!triggerGame" @close="triggerGame = true">
-    <template v-slot:header>
+  <base-modal :isOpen="!triggerGame" @close="triggerGame = true">
+    <template #header>
       <h3>Вы выиграли!</h3>
     </template>
-    <template v-slot:body>
+    <template #body>
       <p>Количество ходов: {{ countMove }}</p>
       <p>Время: {{ time }}</p>
     </template>
-    <template v-slot:footer>
+    <template #footer="{ close }">
       <router-link class="button back" :to="{ name: 'Main' }"
         >Назад</router-link
       >
-      <button @click="triggerGame = true">Начать с начала</button>
+      <button @click="close">Начать с начала</button>
     </template>
   </base-modal>
 </template>
