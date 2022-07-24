@@ -36,27 +36,27 @@ export const actions: ActionTree<State, RootState> & Actions = {
         console.debug("FETCH_IMGS");
         const imgs: Options = [
           {
-            value: "/public/imgs/1.jpg",
+            value: "/src/assets/imgs/1.jpg",
             text: "1.jpg",
           },
           {
-            value: "/public/imgs/2.jpg",
+            value: "/src/assets/imgs/2.jpg",
             text: "2.jpg",
           },
           {
-            value: "/public/imgs/3.jpg",
+            value: "/src/assets/imgs/3.jpg",
             text: "3.jpg",
           },
           {
-            value: "/public/imgs/4.jpeg",
+            value: "/src/assets/imgs/4.jpeg",
             text: "4.jpeg",
           },
           {
-            value: "/public/imgs/5.jpg",
+            value: "/src/assets/imgs/5.jpg",
             text: "5.jpg",
           },
           {
-            value: "/public/imgs/6.jpg",
+            value: "/src/assets/imgs/6.jpg",
             text: "6.jpg",
           },
         ];
@@ -71,15 +71,15 @@ export const actions: ActionTree<State, RootState> & Actions = {
         console.debug("MUSIC_SELECTION");
         const musics: Options = [
           {
-            value: "/public/music/1.mp3",
+            value: "/src/assets/music/1.mp3",
             text: "Короткая мелодия, которая может быть зациклена",
           },
           {
-            value: "/public/music/2.mp3",
+            value: "/src/assets/music/2.mp3",
             text: "Музыка для сбора пазла",
           },
           {
-            value: "/public/music/3.mp3",
+            value: "/src/assets/music/3.mp3",
             text: "Музыка для игр на телефоне или другой платформы",
           },
         ];

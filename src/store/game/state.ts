@@ -4,7 +4,7 @@ export const state = {
   triggerGame: false,
   sec: 0,
   countMove: 0,
-  audioSrc: "/public/music/Звук_Игры.mp3",
+  audioSrc: "/src/assets/music/Звук_Игры.mp3",
 };
 
 export type State = typeof state;
