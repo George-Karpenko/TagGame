@@ -32,9 +32,7 @@ onMounted(() => {
         game.value!.style.setProperty("--no-full-image-opacity", "1");
         grid.shuffleCells();
       } else {
-        setTimeout(() => {
-          game.value!.style.setProperty("--no-full-image-opacity", "0");
-        }, 300);
+        game.value!.style.setProperty("--no-full-image-opacity", "0");
       }
     }
   );
