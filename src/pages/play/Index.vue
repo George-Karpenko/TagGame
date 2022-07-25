@@ -102,6 +102,8 @@ main {
   background-color: #fff;
   opacity: var(--no-full-image-opacity);
   transition: opacity 0.3s;
+  height: 100%;
+  width: 100%;
 }
 
 .tag {
