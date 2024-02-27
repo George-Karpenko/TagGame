@@ -65,7 +65,11 @@ function musicStart(trigger: boolean = false) {
   <template v-if="!loaded">
     <audio ref="audio" loop></audio>
     <router-view />
-    <base-modal :is-open="triggerModal" @close="musicStart" @ok="musicStart(true)">
+    <base-modal
+      :is-open="triggerModal"
+      @close="musicStart"
+      @ok="musicStart(true)"
+    >
       <template #header>
         <h3>Согласие на музыку в игре</h3>
       </template>
@@ -96,7 +100,7 @@ body {
   border: 2px solid white;
   box-sizing: border-box;
 }
-button,
+
 .button {
   background-color: white;
   color: black;

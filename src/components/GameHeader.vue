@@ -3,10 +3,9 @@ import { ref, watch, onMounted, computed } from "vue";
 import store from "@/store";
 import { GameActionTypes } from "@/store/game/action-types";
 
-
 const namespace: string = "game/";
 const countMove = computed(() => store.state.game.countMove);
-const sec = computed(() => store.state.game.sec);
+// const sec = computed(() => store.state.game.sec);
 const time = computed<string>(() => store.getters[namespace + "getTime"]);
 const audioSrc = computed(() => store.state.game.audioSrc);
 const pause = computed<boolean>({
@@ -52,7 +51,8 @@ onMounted(() => {
 </template>
 
 <style scoped>
-[class^="icon-"], [class*=" icon-"] {
+[class^="icon-"],
+[class*=" icon-"] {
   font-size: 2em;
   cursor: pointer;
 }

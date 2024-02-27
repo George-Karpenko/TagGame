@@ -9,7 +9,7 @@ export const routes = [
   {
     path: "/play",
     name: "Play",
-    component: () => import("./pages/play/Index.vue"),
+    component: () => import("./pages/play/Index2.vue"),
   },
   {
     path: "/settings",
