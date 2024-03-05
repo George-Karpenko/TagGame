@@ -1,67 +1,98 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, computed } from "vue";
+import { ref, watch, onMounted, computed, ComputedRef } from "vue";
 import store from "@/store";
 import Grid from "@/js/games/Class/Grid";
 import GameModal from "@/components/GameModal.vue";
 import GameHeader from "@/components/GameHeader.vue";
+import GameCell from "@/components/Game/GameCell.vue";
+import useCells from "@/composables/useCells";
+import useTurnBasedGame from "@/composables/useTurnBasedGame";
 
-const grid = new Grid();
-const triggerGame = computed(() => store.state.game.triggerGame);
+const tagsColumns: ComputedRef<number> = computed(
+  () => store.state.settings.tagsColumns.value
+);
+const tagsRows: ComputedRef<number> = computed(
+  () => store.state.settings.tagsRows.value
+);
+const { cells } = useCells(tagsColumns.value, tagsRows.value);
+const grid = new Grid({
+  tagsColumns: tagsColumns.value,
+  tagsRows: tagsRows.value,
+  cells: cells.value,
+});
+const {
+  isPause,
+  isGameEnd,
+  countMove,
+  audioSrc,
+  time,
+  defaultVariables,
+  basicMoveLogic,
+} = useTurnBasedGame(grid);
 
-const tagsColumns = computed(() => store.state.settings.tagsColumns.value);
-const tagsRows = computed(() => store.state.settings.tagsRows.value);
 const img = computed(() => store.state.settings.imgs.value);
 
-const game = ref<HTMLElement>();
-
-onMounted(() => {
-  game.value!.style.setProperty("--tags-columns", `${tagsColumns.value}`);
-  game.value!.style.setProperty("--tags-rows", `${tagsRows.value}`);
-  game.value!.style.setProperty("--aside-x", `${grid.tagOpacity.x + 1}`);
-  game.value!.style.setProperty("--aside-y", `${grid.tagOpacity.y + 1}`);
-  game.value!.style.setProperty("--background-image", `url(${img.value})`);
-  game.value!.style.setProperty("--no-full-image-opacity", "1");
-
-  watch(
-    () => triggerGame.value,
-    (triggerGame) => {
-      if (triggerGame) {
-        grid.defaultVariables();
-        game.value!.style.setProperty("--aside-x", `${grid.tagOpacity.x + 1}`);
-        game.value!.style.setProperty("--aside-y", `${grid.tagOpacity.y + 1}`);
-        game.value!.style.setProperty("--no-full-image-opacity", "1");
-        grid.shuffleCells();
-      } else {
-        game.value!.style.setProperty("--no-full-image-opacity", "0");
-      }
-    }
-  );
+const styles = ref({
+  "--tags-columns": tagsColumns.value,
+  "--tags-rows": tagsRows.value,
+  "--aside-x": grid.tagOpacity.x + 1,
+  "--aside-y": grid.tagOpacity.y + 1,
+  "--background-image": `url(${img.value})`,
+  "--no-full-image-opacity": 1,
 });
+
+watch(
+  () => isGameEnd.value,
+  (isGameEnd) => {
+    if (isGameEnd) {
+      styles.value["--no-full-image-opacity"] = 0;
+    } else {
+      styles.value["--no-full-image-opacity"] = 1;
+      grid.shuffleCells();
+    }
+  }
+);
+
+function startGame() {
+  defaultVariables();
+}
+
+function triggerPause(value: boolean) {
+  isPause.value = value;
+}
 </script>
 
 <template>
-  <div ref="game" class="game">
-    <game-header />
+  <div :style="styles" class="game">
+    <game-header
+      @isPause="triggerPause"
+      :isPause="isPause"
+      :time="time"
+      :countMove="countMove"
+      :audioSrc="audioSrc"
+    />
     <aside></aside>
     <main>
       <div id="game-board">
         <transition-group name="moving">
-          <div
-            v-for="cell in grid.cells"
-            @click="grid.basicMoveLogic(cell)"
+          <game-cell
+            v-for="cell in cells"
+            @click="basicMoveLogic(cell)"
             :key="cell.tag.value"
-            :style="`
-              --x: ${cell.tag.x};
-              --y: ${cell.tag.y};
-              --opacity: ${cell.tag.value === grid.tagOpacity.value ? 0 : 1}
-            `"
+            :cell="cell"
+            :empty-tag="grid.tagOpacity"
             class="tag"
-          ></div>
+          ></game-cell>
         </transition-group>
       </div>
     </main>
   </div>
-  <game-modal />
+  <game-modal
+    @startGame="startGame"
+    :time="time"
+    :countMove="countMove"
+    :isGameEnd="isGameEnd"
+  />
 </template>
 
 <style scoped>

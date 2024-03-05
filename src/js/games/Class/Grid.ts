@@ -1,23 +1,27 @@
 import { Cell, Tag } from "./Cell";
-import TurnBasedGame from "./TurnBasedGame";
-import { computed } from "vue";
-import store from "@/store";
-
-const tagsColumns = computed(() => store.state.settings.tagsColumns.value);
-const tagsRows = computed(() => store.state.settings.tagsRows.value);
-export default class Grid extends TurnBasedGame {
+export default class Grid {
   #cells: Cell[];
   #tagOpacity: Tag;
   #cellOpacity: Cell;
-  constructor() {
-    super();
-
-    this.#cells = createCellElements();
+  private readonly tagsColumns: number;
+  private readonly tagsRows: number;
+  constructor({
+    tagsColumns,
+    tagsRows,
+    cells,
+  }: {
+    tagsColumns: number;
+    tagsRows: number;
+    cells: Cell[];
+  }) {
+    this.tagsColumns = tagsColumns;
+    this.tagsRows = tagsRows;
+    this.#cells = cells;
     // TODO любая клетка
     // this.#cellOpacity = this.#cells[Math.floor(Math.random() * this.#cells.length)]
     this.#cellOpacity = this.#cells[this.#cells.length - 1];
     this.#tagOpacity = this.#cellOpacity.tag;
-    this.defaultVariables();
+    // this.defaultVariables();
     this.shuffleCells();
   }
 
@@ -92,8 +96,8 @@ export default class Grid extends TurnBasedGame {
     );
 
     if (
-      tagsColumns.value % 2 === 0 &&
-      (tagsRows.value - Math.floor(tag / tagsColumns.value)) % 2 === 0
+      this.tagsColumns % 2 === 0 &&
+      (this.tagsRows - Math.floor(tag / this.tagsColumns)) % 2 === 0
     )
       k++;
 
@@ -157,14 +161,4 @@ export default class Grid extends TurnBasedGame {
       return true;
     return false;
   }
-}
-
-function createCellElements() {
-  const cells = [];
-  for (let i = 0; i < tagsColumns.value * tagsRows.value; i++) {
-    const X = i % tagsColumns.value;
-    const Y = Math.floor(i / tagsColumns.value);
-    cells.push(new Cell(new Tag(i, X, Y), X, Y));
-  }
-  return cells;
 }

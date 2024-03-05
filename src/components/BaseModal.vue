@@ -1,18 +1,18 @@
 <script setup lang="ts">
 const props = defineProps({
-  isOpen: { type: Boolean, required: true }
-})
+  isOpen: { type: Boolean, required: true },
+});
 
 const emit = defineEmits<{
-  (e: 'close'): void
-  (e: 'ok'): void
-}>()
+  (e: "close"): void;
+  (e: "ok"): void;
+}>();
 const close = () => {
   emit("close");
-} 
+};
 const confirm = () => {
   emit("ok");
-}
+};
 </script>
 
 <template>
@@ -29,12 +29,8 @@ const confirm = () => {
 
         <div class="modal-footer">
           <slot name="footer" :close="close" :confirm="confirm">
-            <button class="modal-default-button" @click="close">
-              Close
-            </button>
-            <button class="modal-default-button" @click="confirm">
-              OK
-            </button>
+            <button class="modal-default-button" @click="close">Close</button>
+            <button class="modal-default-button" @click="confirm">OK</button>
           </slot>
         </div>
       </div>
@@ -45,8 +41,8 @@ const confirm = () => {
 <style scoped>
 .modal-footer {
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
+  gap: 1em;
 }
 .modal-mask {
   position: fixed;
@@ -65,7 +61,10 @@ const confirm = () => {
 }
 
 .modal-container {
-  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 320px;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;
@@ -76,10 +75,6 @@ const confirm = () => {
 .modal-header h3 {
   margin-top: 0;
   color: #42b983;
-}
-
-.modal-body {
-  margin: 20px 0;
 }
 
 .modal-default-button {

@@ -1,21 +1,11 @@
-import { ref } from "vue";
-
 export class Cell {
-  #tag;
+  tag;
   readonly x;
   readonly y;
   constructor(tag: Tag, x: number, y: number) {
-    this.#tag = ref(tag);
+    this.tag = tag;
     this.x = x;
     this.y = y;
-  }
-
-  set tag(value: Tag) {
-    this.#tag.value = value;
-  }
-
-  get tag() {
-    return this.#tag.value;
   }
 }
 export class Tag {

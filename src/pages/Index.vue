@@ -9,13 +9,13 @@
 nav {
   display: flex;
   flex-direction: column;
+  gap: 1em;
   max-width: 500px;
   margin: auto;
   padding: 30px;
 }
 .button {
-  padding: 30px 0;
-  font-size: 20px;
+  font-size: 1.5em;
 }
 .button:hover {
   background-color: #4caf50;

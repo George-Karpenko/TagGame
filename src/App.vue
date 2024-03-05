@@ -6,7 +6,8 @@ import BaseModal from "@/components/BaseModal.vue";
 
 const namespace: string = "settings/";
 const music = computed(() => store.state.settings.musicSelection.value);
-const musicVolun = computed(() => store.state.settings.musicVolume);
+const musicVolume = computed(() => store.state.settings.musicVolume);
+const gameVolume = computed(() => store.state.settings.gameVolume);
 const loaded = ref(true);
 Promise.all([
   store.dispatch(namespace + SettingsActionTypes.IMGS),
@@ -17,15 +18,18 @@ Promise.all([
 
 const triggerModal = ref(true);
 const triggerAudio = ref(false);
-const audio = ref<HTMLAudioElement>();
+const audioMusic = ref<HTMLAudioElement>();
+const audioGame = ref<HTMLAudioElement>();
+
+const audioSrc = "/src/assets/music/Звук_Игры.mp3";
 onMounted(() => {
   watch(
     () => triggerAudio.value,
     (triggerAudio) => {
       if (triggerAudio) {
-        audio.value!.src = music.value;
-        audio.value!.play();
-        audio.value!.muted = false;
+        audioMusic.value!.src = music.value;
+        audioMusic.value!.play();
+        audioMusic.value!.muted = false;
       }
     }
   );
@@ -33,21 +37,31 @@ onMounted(() => {
     () => music.value,
     () => {
       if (triggerAudio.value) {
-        console.log(audio.value);
-        audio.value!.src = music.value;
-        audio.value!.currentTime = 0;
-        audio.value!.play();
+        audioMusic.value!.src = music.value;
+        audioMusic.value!.currentTime = 0;
+        audioMusic.value!.play();
       } else {
         triggerModal.value = true;
       }
     }
   );
   watch(
-    () => musicVolun.value.value,
-    (musicVolume) => {
-      audio.value!.volume = (1 / musicVolun.value.max) * musicVolume;
+    () => musicVolume.value.value,
+    (volume) => {
+      audioMusic.value!.volume = (1 / musicVolume.value.max) * volume;
       if (!triggerAudio.value) {
         triggerModal.value = true;
+      }
+    }
+  );
+  watch(
+    () => gameVolume.value.value,
+    (volume) => {
+      if (triggerAudio.value) {
+        audioGame.value!.volume = (1 / gameVolume.value.max) * volume;
+        audioGame.value!.pause();
+        audioGame.value!.currentTime = 0.0;
+        audioGame.value!.play();
       }
     }
   );
@@ -56,16 +70,21 @@ function musicStart(trigger: boolean = false) {
   triggerModal.value = false;
   triggerAudio.value = trigger;
   if (trigger) {
-    audio.value!.muted = true;
+    audioMusic.value!.muted = true;
   }
 }
 </script>
 
 <template>
   <template v-if="!loaded">
-    <audio ref="audio" loop></audio>
+    <audio ref="audioMusic" loop></audio>
+    <audio ref="audioGame" :src="audioSrc"></audio>
     <router-view />
-    <base-modal :is-open="triggerModal" @close="musicStart" @ok="musicStart(true)">
+    <base-modal
+      :is-open="triggerModal"
+      @close="musicStart"
+      @ok="musicStart(true)"
+    >
       <template #header>
         <h3>Согласие на музыку в игре</h3>
       </template>
@@ -73,8 +92,8 @@ function musicStart(trigger: boolean = false) {
         <p>Даёте ли вы согласие на музыку в этой игре?</p>
       </template>
       <template #footer="{ close, confirm }">
-        <button @click="confirm">Да</button>
-        <button @click="close">Нет</button>
+        <button class="button button-red" @click="close">Нет</button>
+        <button class="button" @click="confirm">Да</button>
       </template>
     </base-modal>
   </template>
@@ -88,26 +107,31 @@ body {
   text-align: center;
 }
 
-.borderSelected {
-  border: 2px solid #4caf50;
-  box-sizing: border-box;
-}
-.border {
-  border: 2px solid white;
-  box-sizing: border-box;
-}
-button,
 .button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: white;
   color: black;
-  border: 2px solid #4caf50;
-  padding: 0px 7px;
+  border: 2px solid var(--green);
+  padding: 1em 2em;
   text-align: center;
-  -webkit-transition-duration: 0.4s;
   transition-duration: 0.4s;
-  margin: 16px 0 !important;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 1em;
   cursor: pointer;
+}
+
+.button-red {
+  border: 2px solid var(--red);
+}
+
+.button:hover {
+  background-color: var(--green);
+  color: white;
+}
+
+.button-red:hover {
+  background-color: var(--red);
 }
 </style>

@@ -1,24 +1,23 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import store from "@/store";
-import { GameActionTypes } from "@/store/game/action-types";
 import BaseModal from "@/components/BaseModal.vue";
 
-const namespace: string = "game/";
-const countMove = computed(() => store.state.game.countMove);
-const time = computed<string>(() => store.getters[namespace + "getTime"]);
-const triggerGame = computed<boolean>({
-  get() {
-    return store.state.game.triggerGame;
-  },
-  set(value) {
-    return store.dispatch(namespace + GameActionTypes.TRIGGER_GAME, value);
-  },
+defineProps({
+  countMove: { type: Number, required: true },
+  time: { type: String, required: true },
+  isGameEnd: { type: Boolean, required: true },
 });
+
+const emit = defineEmits<{
+  (e: "startGame"): void;
+}>();
+
+const startGame = () => {
+  emit("startGame");
+};
 </script>
 
 <template>
-  <base-modal :isOpen="!triggerGame" @close="triggerGame = true">
+  <base-modal :isOpen="isGameEnd" @close="startGame">
     <template #header>
       <h3>Вы выиграли!</h3>
     </template>
@@ -27,10 +26,10 @@ const triggerGame = computed<boolean>({
       <p>Время: {{ time }}</p>
     </template>
     <template #footer="{ close }">
-      <router-link class="button back" :to="{ name: 'Main' }"
+      <router-link class="button button-red" :to="{ name: 'Main' }"
         >Назад</router-link
       >
-      <button @click="close">Начать с начала</button>
+      <button class="button" @click="close">Начать с начала</button>
     </template>
   </base-modal>
 </template>

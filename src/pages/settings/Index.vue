@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from "vue";
+import { computed, onMounted, watch } from "vue";
 import { router } from "@/router";
 import store from "@/store";
 import type { State } from "@/store/settings/state";
@@ -7,19 +7,6 @@ import { SettingsActionTypes } from "@/store/settings/action-types";
 import InputsComponent from "@/components/Input/InputsComponent.vue";
 
 const namespace: string = "settings/";
-const audioSrc = computed(() => store.state.game.audioSrc);
-const audio = ref<HTMLAudioElement>();
-onMounted(() => {
-  watch(
-    () => settings.value.gameVolume.value,
-    (gameVolume) => {
-      audio.value!.volume = (1 / settings.value.gameVolume.max) * gameVolume;
-      audio.value!.pause();
-      audio.value!.currentTime = 0.0;
-      audio.value!.play();
-    }
-  );
-});
 const settings = computed<State>({
   get() {
     return store.state.settings;
@@ -39,12 +26,11 @@ function exitInMain(save = false) {
 </script>
 
 <template>
-  <audio ref="audio" :src="audioSrc"></audio>
   <div class="container">
     <inputs-component v-model="settings" name="Настройки"></inputs-component>
     <div class="upSetting">
-      <button @click="exitInMain()" class="cancel">Отмена</button>
-      <button @click="exitInMain(true)">Сохранить</button>
+      <button class="button button-red" @click="exitInMain()">Отмена</button>
+      <button class="button" @click="exitInMain(true)">Сохранить</button>
     </div>
   </div>
 </template>
@@ -60,35 +46,9 @@ function exitInMain(save = false) {
 }
 
 .upSetting {
-  width: 280px;
   margin: auto;
-}
-.upSetting button {
-  padding: 15px 20px;
-}
-.upSetting button {
-  transition-duration: 0.4s;
-}
-.upSetting button.cancel {
-  border: 2px solid #f44336;
-}
-
-.upSetting button:hover {
-  background-color: #4caf50;
-  color: white;
-}
-
-.upSetting button.cancel:hover {
-  background-color: #f44336;
-}
-
-.upSetting {
   display: flex;
-  justify-content: space-between;
+  gap: 1em;
   margin-top: 15px;
-}
-
-.upSetting button {
-  width: 130px;
 }
 </style>
