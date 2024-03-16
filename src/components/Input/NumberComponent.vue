@@ -1,3 +1,32 @@
+<script setup lang="ts">
+import { PropType, ref } from "vue";
+interface Setting {
+  id: string;
+  label: string;
+  min: number;
+  max: number;
+}
+const props = defineProps({
+  setting: {
+    type: Object as PropType<Setting>,
+    required: true,
+  },
+  modelValue: {
+    type: Number,
+    default: "",
+  },
+});
+const emit = defineEmits<{
+  (e: "update:modelValue", value: number): void;
+}>();
+
+const checkedValue = ref(props.modelValue);
+function updateInput(event: Event) {
+  checkedValue.value = parseInt((<HTMLInputElement>event.target).value);
+  emit("update:modelValue", parseInt((<HTMLInputElement>event.target).value));
+}
+</script>
+
 <template>
   <div>
     <label v-if="setting.label" :for="setting.id">
@@ -13,41 +42,6 @@
     />
   </div>
 </template>
-
-<script>
-export default {
-  name: "NumberComponent",
-  props: {
-    setting: {
-      id: {
-        type: String,
-        default: "",
-      },
-      label: {
-        type: String,
-        default: "",
-      },
-      min: {
-        type: Number,
-        default: "",
-      },
-      max: {
-        type: Number,
-        default: "",
-      },
-    },
-    modelValue: {
-      type: Number,
-      default: "",
-    },
-  },
-  methods: {
-    updateInput(event) {
-      this.$emit("update:modelValue", parseInt(event.target.value));
-    },
-  },
-};
-</script>
 
 <style scoped>
 label {

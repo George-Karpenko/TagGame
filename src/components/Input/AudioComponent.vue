@@ -1,3 +1,35 @@
+<script setup lang="ts">
+import { PropType, ref } from "vue";
+interface Option {
+  value: string;
+  text: string;
+}
+interface Setting {
+  id: string;
+  label: string;
+  options: Option[];
+}
+const props = defineProps({
+  setting: {
+    type: Object as PropType<Setting>,
+    required: true,
+  },
+  modelValue: {
+    type: String,
+    default: "",
+  },
+});
+const emit = defineEmits<{
+  (e: "update:modelValue", value: string): void;
+}>();
+
+const checkedValue = ref(props.modelValue);
+function updateInput(event: Event) {
+  checkedValue.value = (<HTMLInputElement>event.target).value;
+  emit("update:modelValue", (<HTMLInputElement>event.target).value);
+}
+</script>
+
 <template>
   <div>
     <p v-if="setting.label">{{ setting.label }}:</p>
@@ -7,8 +39,8 @@
           type="radio"
           name="value"
           :value="option.value"
-          :id="option.value"
-          :checked="value === option.value"
+          :id="'' + option.value"
+          :checked="checkedValue === option.value"
           @input="updateInput"
         />
         <label :for="option.value">{{ option.text }}</label>
@@ -16,43 +48,6 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: "AudioComponent",
-  props: {
-    setting: {
-      id: {
-        type: String,
-        default: "",
-      },
-      label: {
-        type: String,
-        default: "",
-      },
-      options: {
-        // type: Options,
-        default: [],
-      },
-    },
-    modelValue: {
-      type: String,
-      default: "",
-    },
-  },
-  data() {
-    return {
-      value: this.modelValue,
-    };
-  },
-  methods: {
-    updateInput(event) {
-      this.value = event.target.value;
-      this.$emit("update:modelValue", event.target.value);
-    },
-  },
-};
-</script>
 
 <style scoped>
 label {

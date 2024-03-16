@@ -1,3 +1,35 @@
+<script setup lang="ts">
+import { PropType, ref } from "vue";
+interface Option {
+  value: string;
+  text: string;
+}
+interface Setting {
+  id: string;
+  label: string;
+  options: Option[];
+}
+const props = defineProps({
+  setting: {
+    type: Object as PropType<Setting>,
+    required: true,
+  },
+  modelValue: {
+    type: String,
+    default: "",
+  },
+});
+const emit = defineEmits<{
+  (e: "update:modelValue", value: string): void;
+}>();
+
+const checkedValue = ref(props.modelValue);
+function updateInput(event: Event) {
+  checkedValue.value = (<HTMLInputElement>event.target).value;
+  emit("update:modelValue", (<HTMLInputElement>event.target).value);
+}
+</script>
+
 <template>
   <div>
     <label v-if="setting.label" :for="setting.id"> {{ setting.label }}: </label>
@@ -6,49 +38,12 @@
         v-for="option in setting.options"
         :key="option.value"
         :src="option.value"
-        @click="updateInput(option.value)"
-        :class="value == option.value ? 'active' : ''"
+        @click="updateInput"
+        :class="checkedValue == option.value ? 'active' : ''"
       />
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: "FotoComponent",
-  props: {
-    setting: {
-      id: {
-        type: String,
-        default: "",
-      },
-      label: {
-        type: String,
-        default: "",
-      },
-      options: {
-        // type: Options,
-        default: [],
-      },
-    },
-    modelValue: {
-      type: String,
-      default: "",
-    },
-  },
-  data() {
-    return {
-      value: this.modelValue,
-    };
-  },
-  methods: {
-    updateInput(value) {
-      this.value = value;
-      this.$emit("update:modelValue", value);
-    },
-  },
-};
-</script>
 
 <style scoped>
 label {
